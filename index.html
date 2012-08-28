@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html manifest="appcache.manifest">
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<head>
+<title></title>
+<script type="text/javascript" src="demo.js"></script>
+</head>
+
+<body>
+<iframe src="./view.html" width="100" height="100"></iframe>
+<button id="btnCreate">친구야 뭐하나(only html)</button>
+<button id="btnCreate1">reload button</button>
+<div id="component"></div>
+<p><img src="appstore.png" /></p>
+
+<script type="text/javascript">
+//alert("hello11111111111111");
+var appCache = window.applicationCache;
+window.addEventListener('load', function(e) {
+	appCache.addEventListener('cached', handleCacheEvent, false);
+	appCache.addEventListener('checking', handleCacheEvent, false);
+	appCache.addEventListener('downloading', handleCacheEvent, false);
+	appCache.addEventListener('progress', handleCacheEvent, false);
+	appCache.addEventListener('error', handleCacheError, false);
+	appCache.addEventListener('noupdate', handleCacheEvent, false);
+	appCache.addEventListener('obsolete', handleCacheEvent, false);
+	appCache.addEventListener('updateready', handleCacheEvent, false);
+}, false);
+
+
+function handleCacheEvent(e){
+	//console.log(appCache)
+        //alert(e.type);
+	switch(e.type){
+		case "cached":
+			console.log("cached: 어플리케이션 캐시됨")
+		break;
+		
+		case "checking":
+			//appCache.update();
+			console.log("checking: 업데이트 사항 체크")
+		break;
+		
+		case "downloading":
+			console.log("downloading: 다운로드 시작")
+		break;
+		
+		case "progress":
+			console.log("progress: 다운로드 진행")
+			//e.total
+			//e.loaded
+		break;
+		
+		case "noupdate":
+			console.log("noupdate: 업데이트 사항 없음")
+		break;
+		
+		case "obsolete":
+			console.log("obsolete: manifest 파일 찾을수 없음, 캐시삭제함")
+		break;
+		
+		case "updateready":
+			console.log("updateready: 업데이트 완료")
+			if (appCache.status == appCache.UPDATEREADY) {
+				appCache.swapCache();
+				if (confirm('업데이트 완료되었습니다. 재시작 합니다.')) {
+					window.location.reload();
+				}
+			} else {
+				console.log("bbbbbbbbbb")
+			}
+		break;
+	}
+}
+
+function handleCacheError(e){
+	console.log("error: 업데이트 에러")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+var btnCreate = document.querySelector("#btnCreate");
+var btnCreate1 = document.querySelector("#btnCreate1");
+var component = document.querySelector("#component")
+btnCreate.addEventListener("click", function(){
+	
+	var view = document.createElement("iframe");
+	with(view){
+		src = "view.html"
+	}
+	component.appendChild(view)
+}, false);
+
+btnCreate1.addEventListener("click", function(){
+        window.location.reload();
+}, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
